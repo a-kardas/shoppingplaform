@@ -1,0 +1,48 @@
+plugins {
+	id 'java'
+	id 'groovy'
+	id 'org.springframework.boot' version '3.4.0'
+	id 'io.spring.dependency-management' version '1.1.6'
+	id 'io.freefair.lombok' version'8.11'
+}
+
+group = 'com.inpost'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.liquibase:liquibase-core'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+	runtimeOnly 'org.postgresql:postgresql'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
+	testImplementation 'org.spockframework:spock-spring:2.4-M4-groovy-4.0'
+	testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
+	testImplementation 'org.spockframework:spock-junit4:2.4-M4-groovy-4.0'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.register('bootLocalRun') {
+	group = 'application'
+	doFirst {
+		tasks.bootRun.configure {
+			systemProperty('spring.profiles.active', 'local')
+		}
+	}
+	finalizedBy('bootRun')
+}
+
+tasks.named('test', Test.class).configure {
+	useJUnitPlatform()
+}

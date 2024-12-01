@@ -1,0 +1,21 @@
+### POST Calculate total price
+
+POST {{host}}/api/v1/
+Content-Type: application/json
+
+{
+  "orderItems": [
+    {
+      "id": "24b182ec-925b-49b1-997b-1fa255953176",
+      "quantity": 5
+    },
+    {
+      "id": "fabac403-9885-4f85-b2a2-84229c2a166c",
+      "quantity": 1
+    },
+    {
+      "id": "594b0ff5-476a-4402-9f1a-10b4ba36fc18",
+      "quantity": 3
+    }
+  ]
+}
