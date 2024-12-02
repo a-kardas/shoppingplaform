@@ -14,13 +14,13 @@ import static java.util.stream.Collectors.toMap;
 class DiscountsConfiguration {
 
     @Bean
-    PercentageBasedDiscountHandler percentageBasedDiscountHandler() {
-        return new PercentageBasedDiscountHandler();
+    PercentageBasedDiscountHandler percentageBasedDiscountHandler(DiscountRepository discountRepository) {
+        return new PercentageBasedDiscountHandler(discountRepository);
     }
 
     @Bean
-    QuantityBasedDiscountHandler quantityBasedDiscountHandler() {
-        return new QuantityBasedDiscountHandler();
+    QuantityBasedDiscountHandler quantityBasedDiscountHandler(DiscountRepository discountRepository) {
+        return new QuantityBasedDiscountHandler(discountRepository);
     }
 
     @Bean
