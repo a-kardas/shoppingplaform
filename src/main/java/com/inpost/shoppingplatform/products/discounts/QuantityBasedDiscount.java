@@ -4,6 +4,7 @@ import com.inpost.shoppingplatform.products.OrderItem;
 import com.inpost.shoppingplatform.products.Price;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Collections.emptyList;
@@ -18,20 +19,20 @@ public record QuantityBasedDiscount(UUID productId, List<QuantityBasedDiscountRu
     }
 
     public Price reducePriceIfApplicable(OrderItem orderItem, Price regularPrice) {
-        Integer discountInCents = qualifiesForDiscount(orderItem.quantity());
-        if (isNull(discountInCents)) {
-            return new Price(regularPrice.valueInCents(), regularPrice.currency());
-        } else {
-            int newPrice = regularPrice.valueInCents() - discountInCents;
-            return new Price(newPrice, regularPrice.currency());
-        }
+        Optional<Integer> discountInCents = qualifiesForDiscount(orderItem.quantity());
+        return discountInCents
+                .map(cents -> {
+                    int newPrice = regularPrice.valueInCents() - cents;
+                    return new Price(newPrice, regularPrice.currency());
+                })
+                .orElse(new Price(regularPrice.valueInCents(), regularPrice.currency()));
     }
 
-    public Integer qualifiesForDiscount(int orderQuantity) {
+    private Optional<Integer> qualifiesForDiscount(int orderQuantity) {
         return rules.stream()
                 .filter(rule -> rule.match(orderQuantity))
-                .findFirst().map(rule -> rule.discountInCents)
-                .orElse(null);
+                .findFirst()
+                .map(rule -> rule.discountInCents);
     }
 
     private List<QuantityBasedDiscountRule> sortRules(List<QuantityBasedDiscountRule> rules) {

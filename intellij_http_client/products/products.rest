@@ -48,3 +48,22 @@ Content-Type: application/json
   "productId": "fabac403-9885-4f85-b2a2-84229c2a166c",
   "quantity": 1
 }
+
+### POST Calculate total price - missing product ID, 400 Bad Request expected
+
+POST {{host}}/api/v1/products/price
+Content-Type: application/json
+
+{
+  "quantity": 1
+}
+
+### POST Calculate total price - quantity is negative, 400 Bad Request expected
+
+POST {{host}}/api/v1/products/price
+Content-Type: application/json
+
+{
+  "productId": "fabac403-9885-4f85-b2a2-84229c2a166c",
+  "quantity": -1
+}

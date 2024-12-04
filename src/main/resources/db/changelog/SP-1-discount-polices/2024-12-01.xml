@@ -28,10 +28,9 @@
         <comment>The table storing information about applicable discounts.</comment>
         <sql>
             CREATE TABLE applicable_discounts(
-                product_id UUID REFERENCES products(id),
+                product_id UUID PRIMARY KEY REFERENCES products(id),
                 discount_policy discount_policy NOT NULL,
-                discount_configuration JSON NOT NULL,
-                PRIMARY KEY(product_id, discount_policy)
+                discount_configuration JSON NOT NULL
             );
         </sql>
     </changeSet>

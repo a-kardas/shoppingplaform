@@ -21,17 +21,28 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.liquibase:liquibase-core'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
 	runtimeOnly 'org.postgresql:postgresql'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.testcontainers:postgresql:1.19.8'
-	//testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
 	testImplementation 'org.spockframework:spock-spring:2.4-M4-groovy-4.0'
 	testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
 	testImplementation 'org.spockframework:spock-junit4:2.4-M4-groovy-4.0'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test', Test.class).configure {
+	useJUnitPlatform()
+	exclude '**/*IT*.*'
+}
+
+tasks.register('integrationTest', Test.class) {
+	group = 'verification'
+	useJUnitPlatform()
+	include '**/*IT*.*'
 }
 
 tasks.register('bootLocalRun') {
@@ -44,14 +55,9 @@ tasks.register('bootLocalRun') {
 	finalizedBy('bootRun')
 }
 
-tasks.named('test', Test.class).configure {
-	useJUnitPlatform()
-	exclude '**/*IT*.*'
-}
-
-tasks.register('integrationTest', Test.class) {
-	group = 'verification'
-	useJUnitPlatform()
-	include '**/*IT*.*'
+//disable plain archives
+tasks.named('jar') {
+	archiveClassifier = ''
+	enabled = false
 }
 
