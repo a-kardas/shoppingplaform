@@ -1,4 +1,4 @@
-package com.inpost.shoppingplatform.infrastructure.mybatis;
+package com.inpost.shoppingplatform.products.adapters.mybatis;
 
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;

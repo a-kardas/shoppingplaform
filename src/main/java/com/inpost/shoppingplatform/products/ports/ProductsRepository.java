@@ -1,10 +1,11 @@
 package com.inpost.shoppingplatform.products.ports;
 
-import com.inpost.shoppingplatform.infrastructure.mybatis.UuidTypeHandler;
+import com.inpost.shoppingplatform.products.adapters.mybatis.UuidTypeHandler;
 import com.inpost.shoppingplatform.products.Product;
+import org.apache.ibatis.annotations.Arg;
+import org.apache.ibatis.annotations.ConstructorArgs;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
@@ -14,11 +15,11 @@ import java.util.UUID;
 @Mapper
 public interface ProductsRepository {
 
-    @Results({
-            @Result(property = "id", column = "id", typeHandler = UuidTypeHandler.class),
-            @Result(property = "name", column = "name"),
-            @Result(property = "unitPrice.valueInCents", column = "price_in_cents"),
-            @Result(property = "unitPrice.currency", column = "currency_iso_code")
+    @ConstructorArgs({
+            @Arg(column = "id", javaType = UUID.class, typeHandler = UuidTypeHandler.class),
+            @Arg(column = "name", javaType = String.class),
+            @Arg(column = "price_in_cents", javaType = int.class),
+            @Arg(column = "currency_iso_code", javaType = String.class)
     })
     @Select("SELECT " +
             "id, name, price_in_cents, currency_iso_code " +

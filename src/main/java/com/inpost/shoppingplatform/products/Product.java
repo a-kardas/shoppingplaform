@@ -1,19 +1,20 @@
 package com.inpost.shoppingplatform.products;
 
-import lombok.Data;
-
 import java.util.UUID;
 
-@Data
-public class Product {
+public record Product(UUID id, String name, Price unitPrice) {
 
-    private UUID id;
-    private String name;
-    private Price unitPrice;
+    @SuppressWarnings("unused")
+    public Product(UUID id, String name, int valueInCents, String currency) {
+        this(id, name, new Price(valueInCents, currency));
+    }
 
     public Price calculateRegularTotalPrice(int quantity) {
-        int valueInCents = this.unitPrice.getValueInCents() * quantity;
-        return new Price(valueInCents, this.unitPrice.getCurrency());
+        if (quantity < 0) {
+            throw new CalculationException("Cannot calculate total price. Quantity cannot be negative.");
+        }
+        int valueInCents = this.unitPrice.valueInCents() * quantity;
+        return new Price(valueInCents, this.unitPrice.currency());
     }
 
 }

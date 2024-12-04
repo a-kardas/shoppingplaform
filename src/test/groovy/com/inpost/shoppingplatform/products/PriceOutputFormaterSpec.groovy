@@ -17,6 +17,7 @@ class PriceOutputFormaterSpec extends Specification {
             1               | 0.01
             99              | 0.99
             100             | 1.00
+            175             | 1.75
             199             | 1.99
             9999            | 99.99
             99999           | 999.99

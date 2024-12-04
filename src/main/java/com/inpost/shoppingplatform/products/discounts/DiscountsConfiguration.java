@@ -4,6 +4,7 @@ import com.inpost.shoppingplatform.products.ports.DiscountRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,7 +27,12 @@ class DiscountsConfiguration {
     @Bean
     DiscountCalculator discountCalculator(DiscountRepository discountRepository, Set<DiscountPolicyHandler> discountPolicyHandlers) {
         Map<DiscountPolicy, DiscountPolicyHandler> handlersByPolicy = discountPolicyHandlers.stream()
-                .collect(toMap(DiscountPolicyHandler::handles, identity()));
+                .collect(toMap(
+                        DiscountPolicyHandler::handles,
+                        identity(),
+                        (h1, h2) -> { throw new IllegalStateException("Detected at least two handlers responsible for the same discount policy!"); },
+                        () -> new EnumMap<>(DiscountPolicy.class)));
+
         if (handlersByPolicy.size() != DiscountPolicy.values().length) {
             throw new IllegalStateException(
                     String.format("Invalid configuration detected. Missing discount policy handler(s). Supported polices: %s, handlers found for: %s",

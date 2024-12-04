@@ -1,43 +1,34 @@
-package com.inpost.shoppingplatform.products.ports;
+package com.inpost.shoppingplatform.products.discounts;
 
 import com.inpost.shoppingplatform.products.OrderItem;
 import com.inpost.shoppingplatform.products.Price;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.Collections.emptyList;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.isNull;
 
-@Data
-@NoArgsConstructor
-public class PercentageBasedDiscount {
-
-    private UUID productId;
-    private List<PercentageBasedDiscountRule> rules;
+public record PercentageBasedDiscount(UUID productId, List<PercentageBasedDiscountRule> rules) {
 
     public PercentageBasedDiscount(UUID productId, List<PercentageBasedDiscountRule> rules) {
         this.productId = productId;
-        this.rules = sortRules(rules);
-    }
-
-    @SuppressWarnings("unused")
-    public void setRules(List<PercentageBasedDiscountRule> rules) {
-        this.rules = sortRules(rules);
+        this.rules = isNull(rules)? emptyList() : sortRules(rules);
     }
 
     public Price reducePriceIfApplicable(OrderItem orderItem, Price regularPrice) {
         BigDecimal percentageDiscount = qualifiesForDiscount(orderItem.quantity());
         if (isNull(percentageDiscount)) {
-            return new Price(regularPrice.getValueInCents(), regularPrice.getCurrency());
+            return new Price(regularPrice.valueInCents(), regularPrice.currency());
         } else {
-            int discountInCents = percentageDiscount.multiply(new BigDecimal(regularPrice.getValueInCents())).setScale(0, RoundingMode.HALF_UP).intValue();
-            int newPrice = regularPrice.getValueInCents() - discountInCents;
-            return new Price(newPrice, regularPrice.getCurrency());
+            int discountInCents = percentageDiscount.multiply(new BigDecimal(regularPrice.valueInCents()))
+                    .setScale(0, RoundingMode.HALF_UP)
+                    .intValue();
+            int newPrice = regularPrice.valueInCents() - discountInCents;
+            return new Price(newPrice, regularPrice.currency());
         }
     }
 
@@ -49,14 +40,10 @@ public class PercentageBasedDiscount {
     }
 
     private List<PercentageBasedDiscountRule> sortRules(List<PercentageBasedDiscountRule> rules) {
-        return rules.stream().sorted(comparing(PercentageBasedDiscountRule::getMinimumOrderQuantity).reversed()).toList();
+        return rules.stream().sorted(comparing(PercentageBasedDiscountRule::minimumOrderQuantity).reversed()).toList();
     }
 
-    @Data
-    public static class PercentageBasedDiscountRule {
-        private int minimumOrderQuantity;
-        private BigDecimal discountPercent;
-
+    public record PercentageBasedDiscountRule(int minimumOrderQuantity, BigDecimal discountPercent) {
         boolean match(int orderQuantity) {
             return orderQuantity >= this.minimumOrderQuantity;
         }

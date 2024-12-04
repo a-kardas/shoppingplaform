@@ -1,9 +1,50 @@
-### POST Calculate total price
+### POST Calculate total price - discount is not applicable (no discount configured)
 
-POST {{host}}/api/v1/products/calculate
+POST {{host}}/api/v1/products/price
+Content-Type: application/json
+
+{
+  "productId": "5dd0ec23-1959-4983-96e2-8b12cf646b0c",
+  "quantity": 3
+}
+
+
+### POST Calculate total price - discount is not applicable (does not meet the requirements)
+
+POST {{host}}/api/v1/products/price
+Content-Type: application/json
+
+{
+  "productId": "24b182ec-925b-49b1-997b-1fa255953176",
+  "quantity": 2
+}
+
+### POST Calculate total price - quantity-based discount is applicable (-3$)
+
+POST {{host}}/api/v1/products/price
+Content-Type: application/json
+
+{
+  "productId": "24b182ec-925b-49b1-997b-1fa255953176",
+  "quantity": 3
+}
+
+### POST Calculate total price - quantity-based discount is applicable (-5$)
+
+POST {{host}}/api/v1/products/price
+Content-Type: application/json
+
+{
+  "productId": "24b182ec-925b-49b1-997b-1fa255953176",
+  "quantity": 5
+}
+
+### POST Calculate total price - percentage-based discount is applicable (-10%)
+
+POST {{host}}/api/v1/products/price
 Content-Type: application/json
 
 {
   "productId": "fabac403-9885-4f85-b2a2-84229c2a166c",
-  "quantity": 2
+  "quantity": 1
 }

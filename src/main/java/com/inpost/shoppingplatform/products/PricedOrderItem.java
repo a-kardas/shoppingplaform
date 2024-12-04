@@ -9,10 +9,10 @@ public record PricedOrderItem(UUID id, int quantity, BigDecimal regularUnitPrice
         return new PricedOrderItem(
                 orderItem.productId(),
                 orderItem.quantity(),
-                PriceOutputFormater.format(product.getUnitPrice().getValueInCents()),
-                PriceOutputFormater.format(regularTotalPrice.getValueInCents()),
-                PriceOutputFormater.format(finalTotalPrice.getValueInCents()),
-                finalTotalPrice.getCurrency()
+                PriceOutputFormater.format(product.unitPrice().valueInCents()),
+                PriceOutputFormater.format(regularTotalPrice.valueInCents()),
+                PriceOutputFormater.format(finalTotalPrice.valueInCents()),
+                finalTotalPrice.currency()
         );
     }
 }

@@ -3,7 +3,6 @@ package com.inpost.shoppingplatform.products.discounts;
 import com.inpost.shoppingplatform.products.OrderItem;
 import com.inpost.shoppingplatform.products.Price;
 import com.inpost.shoppingplatform.products.ports.DiscountRepository;
-import com.inpost.shoppingplatform.products.ports.PercentageBasedDiscount;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;

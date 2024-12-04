@@ -17,7 +17,7 @@ public class ProductsController {
 
     private final ProductPriceAssessor productPriceAssessor;
 
-    @PostMapping("/calculate")
+    @PostMapping("/price")
     PricedOrderItem priceOrderItem(@RequestBody @Validated OrderItem orderItem){
         return productPriceAssessor.calculateTotalPrice(orderItem);
     }

@@ -3,7 +3,7 @@ package com.inpost.shoppingplatform.products.adapters.mybatis;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inpost.shoppingplatform.products.ports.PercentageBasedDiscount.PercentageBasedDiscountRule;
+import com.inpost.shoppingplatform.products.discounts.PercentageBasedDiscount.PercentageBasedDiscountRule;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 
